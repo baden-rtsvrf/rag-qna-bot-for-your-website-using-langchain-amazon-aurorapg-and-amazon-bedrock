@@ -6,7 +6,7 @@ In a digital age inundated with information, website visitors seek instant acces
 
 This code provides a solution for website owners seeking to enhance user engagement and streamline information retrieval by presenting a comprehensive guide on building a Natural Language Q&A Bot using Retrieval Augmented Generation (RAG) and Amazon Bedrock Models.
 
-This approach leverages the power of langchain modules ([recursive_url](https://python.langchain.com/docs/integrations/document_loaders/recursive_url)) to recurisively get all the contents on a webpage based on the maximum depth we provide, convert the data into embeddings using Amazon Bedrock Titan Embeddings Model, store the embeddings in Aurora PostgresSQL using pgvector extension and retrieve the answer based on the question provided by the user using Amazon Bedrock 3P Models (Antropic Claude v2).
+This approach leverages the power of langchain modules ([recursive_url](https://python.langchain.com/docs/integrations/document_loaders/recursive_url)) to recursively get all the contents on a webpage based on the maximum depth we provide, convert the data into embeddings using Amazon Bedrock Titan Embeddings Model, store the embeddings in Aurora PostgresSQL using pgvector extension and retrieve the answer based on the question provided by the user using Amazon Bedrock 3P Models (Anthropic Claude v2).
 
 ### Architecture
 
@@ -14,20 +14,19 @@ The architecture is as follows:
 
 ![Architecture Diagram](images/Architecture.png)
 
-1. Companies possess a repository of knowledge resources in webpages like FAQ docs. These pages can have links to multiple webpages with more content. We can scrap the data using ([recursive_url](https://python.langchain.com/docs/integrations/document_loaders/recursive_url)) module in Langchain.  
+1. Companies possess a repository of knowledge resources in webpages like FAQ docs. These pages can have links to multiple webpages with more content. We can scrape the data using ([recursive_url](https://python.langchain.com/docs/integrations/document_loaders/recursive_url)) module in Langchain.  
 
 2. Utilizing the Titan Embedding model from Amazon Bedrock, these resources are transformed into vector representations, ensuring their compatibility for advanced processing.
 
-3. The generated vector embeddings are then stored within Amazon Aurora PostgreSQL, utilizing the specialized pgVector capabilities for efficient storage and retrieval.
+3. The generated vector embeddings are then stored within Amazon Aurora PostgreSQL, utilizing the specialized pgvector capabilities for efficient storage and retrieval.
 
 4. A user initiates the process by posing a question, for instance, "How can AWS support vector databases?".
 
 5. The user's question is seamlessly translated into its vector embedding, facilitating subsequent computational comparisons.
 
-6. A semantic search operation is executed on the Amazon Aurora PostgreSQL database, employing the vectorized representations to identify knowledge resources with relevant
-information.
+6. A semantic search operation is executed on the Amazon Aurora PostgreSQL database, employing the vectorized representations to identify knowledge resources with relevant information.
 
-7. The extracted answers from the search are fed into the Antropic Claude v2 model provided by Amazon Bedrock.
+7. The extracted answers from the search are fed into the Anthropic Claude v2 model provided by Amazon Bedrock.
 
 8. Leveraging the enhanced context and knowledge derived from the semantic search, the model generates a comprehensive response.
 
@@ -41,9 +40,10 @@ information.
 
 2. Make sure you have access to the Amazon Bedrock models you are trying to use.
 
-3. The EC2 where you are runing the code needs access to the Amazon Aurora PostgreSQL Database, Amazon Bedrock Aws Secrets Manager via IAM Role
+3. The EC2 where you are runing the code needs access to the Amazon Aurora PostgreSQL Database, Amazon Bedrock, AWS Secrets Manager via an IAM Role.
 
-4. The code runs on Python3.10. Activate a virtual environment and install all the requirements
+4. The code runs on Python3.10. Activate a virtual environment and install all the requirements:
+
 ```
 python3.10 -m venv venv
 source venv/bin/activate
@@ -52,13 +52,14 @@ pip3 install -r requirements.txt
 
 5. Modify the code variables Home.py with the appropriate details according to your environment: 
 
-sm_key_name -> AWS Secret Manager key where for storing your Amazon Aurora PostgreSQL details
+`sm_key_name` -> AWS Secret Manager key where for storing your Amazon Aurora PostgreSQL details
 
-database -> the database name where embeddings will be created
+`database` -> the database name where embeddings will be created
 
-model_id -> The Bedrock Model which you will be using
+`model_id` -> The Bedrock Model which you will be using
 
-6. To run the Streamlit application
+6. To run the Streamlit application:
+
 ```
 streamlit run Home.py
 ```
